@@ -10,7 +10,7 @@ import com.roygf.grintest.repositories.WebRepository
 import kotlinx.android.synthetic.main.activity_saved_devices.*
 import java.util.ArrayList
 
-class SavedDevicesActivity : AppCompatActivity(), WebRepository.WebRepositoryListener {
+class SavedDevicesActivity : AppCompatActivity(), WebRepository.DevicesListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,8 @@ class SavedDevicesActivity : AppCompatActivity(), WebRepository.WebRepositoryLis
 
 
     fun fetchDevices(){
-        val webRepository = WebRepository(applicationContext, this)
+        val webRepository = WebRepository(applicationContext)
+        webRepository.getDevicesListener = this
         webRepository.fetchSavedDevices()
     }
 

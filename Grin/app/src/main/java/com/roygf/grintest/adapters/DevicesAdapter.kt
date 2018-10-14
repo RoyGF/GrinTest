@@ -10,20 +10,28 @@ import com.roygf.grintest.R
 import kotlinx.android.synthetic.main.item_device.view.*
 
 class DevicesAdapter (val context: Context)
-    : RecyclerView.Adapter<DevicesAdapter.ViewHolder>() {
+    : RecyclerView.Adapter<DevicesAdapter.ViewHolder>(), View.OnClickListener {
 
     private var devices : ArrayList<Device> = arrayListOf()
+    var listener : DeviceListener? = null
 
-    class ViewHolder (view : View) : RecyclerView.ViewHolder(view){
+    class ViewHolder (view : View, listener : View.OnClickListener)
+        : RecyclerView.ViewHolder(view){
         val mDeviceName = view.mDeviceName
+        val mSaveButton = view.mSaveButton
+        init {
+            mSaveButton.setOnClickListener(listener)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_device, parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_device, parent, false), this)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mDeviceName?.text = devices[position].name
+        val device = devices[position]
+        holder.mDeviceName.text = device.name
+        holder.mSaveButton.tag = device
     }
 
     override fun getItemCount(): Int {
@@ -33,6 +41,15 @@ class DevicesAdapter (val context: Context)
     fun addDevice(device : Device){
         devices.add(device)
         notifyDataSetChanged()
+    }
+
+    override fun onClick(v: View?) {
+        val device : Device = v?.tag as Device
+        listener?.onDeviceSelected(device)
+    }
+
+    interface DeviceListener{
+        fun onDeviceSelected(device : Device)
     }
 
 }

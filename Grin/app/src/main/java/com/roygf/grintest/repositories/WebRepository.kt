@@ -16,14 +16,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class WebRepository (context : Context, listener : WebRepositoryListener?) {
+class WebRepository (context : Context) {
 
     var url_base = "http://mock.westcentralus.cloudapp.azure.com/grin_test/bluetooth/"
     var mQueue = Volley.newRequestQueue(context)
     var successHttp = Response.Listener<JSONObject> {response-> onHttpSuccess(response) }
+    var saveSuccess = Response.Listener<JSONObject> {response-> onSaveDeviceSuccess(response)}
     var errorHttp = Response.ErrorListener { error : VolleyError -> onHttpFailed(error) }
     var mContext : Context = context
-    var mListener : WebRepositoryListener? = listener
+    var getDevicesListener : DevicesListener? = null
+    var saveListener : SaveDeviceListener? = null
 
     /**Methods**/
     fun fetchSavedDevices(){
@@ -37,14 +39,22 @@ class WebRepository (context : Context, listener : WebRepositoryListener?) {
         val body = JSONObject()
         body.put("name", device.name)
         body.put("strength", device.strenght)
-        val request = JsonObjectRequest(Request.Method.POST, url, body, successHttp, errorHttp)
+        val request = JsonObjectRequest(Request.Method.POST, url, body, saveSuccess, errorHttp)
         mQueue.add(request)
+    }
+
+    fun onSaveDeviceSuccess(response : JSONObject){
+        val jsonArray = response.getJSONObject("object")
+        if (jsonArray != null)
+            saveListener?.onSaveSuccess()
+        else
+            saveListener?.onSaveError("No se pudo guardar el dispositivo")
     }
 
     fun onHttpSuccess(response : JSONObject){
         val jsonArray = response.getJSONArray("objects")
         val devices = getDevices(jsonArray)
-        mListener?.onGetDevicesSuccess(devices)
+        getDevicesListener?.onGetDevicesSuccess(devices)
     }
 
     fun onHttpFailed(error: VolleyError){
@@ -78,7 +88,12 @@ class WebRepository (context : Context, listener : WebRepositoryListener?) {
 
 
     /**Interfaces**/
-    interface WebRepositoryListener{
+    interface DevicesListener{
         fun onGetDevicesSuccess(devices : ArrayList<Device>)
+    }
+
+    interface SaveDeviceListener{
+        fun onSaveSuccess()
+        fun onSaveError(error : String)
     }
 }
