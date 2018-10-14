@@ -9,15 +9,16 @@ import android.content.IntentFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.roygf.grintest.R
 import com.roygf.grintest.adapters.DevicesAdapter
 import com.roygf.grintest.utils.BluetoothUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class NearDevicesActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var mBluetoothUtils : BluetoothUtils
     lateinit var mDevicesAdapter : DevicesAdapter
+    lateinit var mBluetoothUtils : BluetoothUtils
 
 
     val mBroadCastReceiver = object : BroadcastReceiver(){
@@ -37,11 +38,17 @@ class MainActivity : AppCompatActivity() {
 
         mBluetoothUtils = BluetoothUtils(applicationContext)
         mBluetoothUtils.fetchBluetoothDevices()
+        mSavedDevicesButton.setOnClickListener(this)
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(mBroadCastReceiver)
+    }
+
+    override fun onClick(v: View?) {
+        val intent = Intent(this, SavedDevicesActivity::class.java)
+        startActivity(intent)
     }
 }

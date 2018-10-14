@@ -4,34 +4,36 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.widget.Toast
 import com.roygf.grintest.models.Device
+import org.jetbrains.anko.toast
 import kotlin.properties.Delegates
 
-class BluetoothUtils (context : Context){
+class BluetoothUtils (context : Context) {
 
-    var mContext : Context by Delegates.notNull()
-    var mBluetoothAdapter : BluetoothAdapter
-    var mDevices : ArrayList<Device>
-
-    init {
-        this.mContext = context
-        this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        this.mDevices = arrayListOf()
-    }
+    lateinit var mBluetoothAdapter : BluetoothAdapter
+    var mDevices : ArrayList<Device> = arrayListOf()
+    var mContext = context
 
     fun fetchBluetoothDevices(){
-        mBluetoothAdapter.startDiscovery()
+        val packageManager = mContext.packageManager
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+            mBluetoothAdapter.startDiscovery()
+        } else
+            mContext.toast("Dispositivo no tiene soporte bluetooth")
 
     }
 
     fun getBluetoothDevices(intent: Intent?) : Device{
-        val availableDevice : Device = Device("", "", false)
+        val availableDevice : Device = Device(null, null, "Thinkpad", "-20db", true)
         val action = intent?.action
         if (action == BluetoothDevice.ACTION_FOUND){
             val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
             val name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME)
             availableDevice.name = name
-            availableDevice.db = rssi.toString()
+            availableDevice.strenght = rssi.toString()
             availableDevice.isAvailable = true
         }
 
