@@ -10,12 +10,18 @@ import com.roygf.grintest.repositories.WebRepository
 import kotlinx.android.synthetic.main.activity_saved_devices.*
 import java.util.ArrayList
 
-class SavedDevicesActivity : AppCompatActivity(), WebRepository.DevicesListener {
+class SavedDevicesActivity :
+        BaseActivity(),
+        WebRepository.DevicesListener {
+
+    var mAdapter : SavedDevicesAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_saved_devices)
         fetchDevices()
+        button_sort_name.setOnClickListener {sortListByName()}
+        button_sort_date.setOnClickListener{sortListByDate()}
     }
 
 
@@ -27,9 +33,19 @@ class SavedDevicesActivity : AppCompatActivity(), WebRepository.DevicesListener 
 
 
     override fun onGetDevicesSuccess(devices: ArrayList<Device>) {
-        val adapter = SavedDevicesAdapter(applicationContext, devices)
+        mAdapter = SavedDevicesAdapter(applicationContext, devices)
+        //var sortedList = devices.sortedWith(compareBy {it.created})
+
         mSavedDevicesRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        mSavedDevicesRecycler.adapter = adapter
+        mSavedDevicesRecycler.adapter = mAdapter
+    }
+
+    private fun sortListByName(){
+        mAdapter?.sortByName()
+    }
+
+    private fun sortListByDate(){
+        mAdapter?.sortByDate()
     }
 
 }

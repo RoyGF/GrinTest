@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.item_device.view.*
 class SavedDevicesAdapter (val context: Context, val devices : ArrayList<Device>)
     : RecyclerView.Adapter<SavedDevicesAdapter.ViewHolder>() {
 
+    var mDevices : List<Device>  = devices
+
     class ViewHolder (view : View) : RecyclerView.ViewHolder(view){
         val mDeviceName = view.mDeviceName
     }
@@ -21,11 +23,21 @@ class SavedDevicesAdapter (val context: Context, val devices : ArrayList<Device>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mDeviceName?.text = devices[position].name
+        holder.mDeviceName?.text = mDevices[position].name
     }
 
     override fun getItemCount(): Int {
         return devices.size
+    }
+
+    fun sortByName(){
+        mDevices = devices.sortedWith(compareBy {it.name})
+        notifyDataSetChanged()
+    }
+
+    fun sortByDate(){
+        mDevices = devices.sortedWith(compareBy {it.created})
+        notifyDataSetChanged()
     }
 
 }
