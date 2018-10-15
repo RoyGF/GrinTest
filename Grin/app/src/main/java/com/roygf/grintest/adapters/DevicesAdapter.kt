@@ -38,14 +38,19 @@ class DevicesAdapter (val context: Context)
         return devices.size
     }
 
+    override fun onClick(v: View?) {
+        val device : Device = v?.tag as Device
+        listener?.onDeviceSelected(device)
+    }
+
     fun addDevice(device : Device){
         devices.add(device)
         notifyDataSetChanged()
     }
 
-    override fun onClick(v: View?) {
-        val device : Device = v?.tag as Device
-        listener?.onDeviceSelected(device)
+    fun emptyList(){
+        devices.clear()
+        notifyDataSetChanged()
     }
 
     interface DeviceListener{

@@ -5,40 +5,60 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.widget.Toast
+import android.os.Handler
+import android.view.View
+import android.widget.RelativeLayout
+import com.roygf.grintest.R
 import com.roygf.grintest.models.Device
 import org.jetbrains.anko.toast
-import kotlin.properties.Delegates
 
-class BluetoothUtils (context : Context) {
+class BluetoothUtils (var context : Context) {
 
     lateinit var mBluetoothAdapter : BluetoothAdapter
-    var mDevices : ArrayList<Device> = arrayListOf()
-    var mContext = context
+    var mLoadingLayout : RelativeLayout? = null
 
     fun fetchBluetoothDevices(){
-        val packageManager = mContext.packageManager
+        val packageManager = context.packageManager
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             mBluetoothAdapter.startDiscovery()
+            mLoadingLayout?.visibility = View.VISIBLE
+            startLayoutDelay()
         } else
-            mContext.toast("Dispositivo no tiene soporte bluetooth")
-
+            context.toast(R.string.text_unsupported_bluetooth)
     }
 
     fun getBluetoothDevices(intent: Intent?) : Device{
-        val availableDevice : Device = Device(null, null, "Thinkpad", "-20db", true)
+        val availableDevice = Device()
         val action = intent?.action
         if (action == BluetoothDevice.ACTION_FOUND){
-            val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
+            val strength = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
             val name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME)
-            availableDevice.name = name
-            availableDevice.strenght = rssi.toString()
-            availableDevice.isAvailable = true
-        }
 
+            availableDevice.name = name
+            availableDevice.strength = strength.toString()
+        }
         return availableDevice
     }
 
+    fun refresh(){
+        if (mBluetoothAdapter.isDiscovering)
+            mBluetoothAdapter.cancelDiscovery()
 
+        mBluetoothAdapter.startDiscovery()
+        mLoadingLayout?.visibility = View.VISIBLE
+        startLayoutDelay()
+    }
+
+    fun setLoadingLayout(loadingLayout : RelativeLayout){
+        this.mLoadingLayout = loadingLayout
+    }
+
+    fun startLayoutDelay(){
+        Handler().postDelayed({
+            mLoadingLayout?.visibility = View.GONE
+            if (mBluetoothAdapter.isDiscovering)
+                mBluetoothAdapter.cancelDiscovery()
+        }, 20000)
+    }
 }

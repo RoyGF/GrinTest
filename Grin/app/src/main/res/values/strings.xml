@@ -2,4 +2,8 @@
     <string name="app_name">GrinTest</string>
     <string name="bullet">"\u2022</string>
     <string name="text_saved_devices">Dispositivos Guardados</string>
+    <string name="text_saved_device">Dispositivo guardado</string>
+    <string name="text_search">Buscar</string>
+    <string name="text_loading">Buscando dispositivos…</string>
+    <string name="text_unsupported_bluetooth">Dispositivo no tiene soporte bluetooth o no se encuentra activado</string>
 </resources>

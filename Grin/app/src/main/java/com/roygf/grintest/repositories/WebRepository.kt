@@ -38,7 +38,7 @@ class WebRepository (context : Context) {
         val url = url_base + "create"
         val body = JSONObject()
         body.put("name", device.name)
-        body.put("strength", device.strenght)
+        body.put("strength", device.strength)
         val request = JsonObjectRequest(Request.Method.POST, url, body, saveSuccess, errorHttp)
         mQueue.add(request)
     }

@@ -1,27 +1,23 @@
 package com.roygf.grintest.activities
 
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.RelativeLayout
 import com.roygf.grintest.R
 import com.roygf.grintest.adapters.DevicesAdapter
 import com.roygf.grintest.models.Device
 import com.roygf.grintest.repositories.WebRepository
-import com.roygf.grintest.repositories.WebRepository.DevicesListener
 import com.roygf.grintest.utils.BluetoothUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 class NearDevicesActivity :
-        AppCompatActivity(),
-        View.OnClickListener,
+        BaseActivity(),
         DevicesAdapter.DeviceListener,
         WebRepository.SaveDeviceListener {
 
@@ -30,7 +26,7 @@ class NearDevicesActivity :
     lateinit var mBluetoothUtils : BluetoothUtils
 
 
-    val mBroadCastReceiver = object : BroadcastReceiver(){
+    private val mBroadCastReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
             mDevicesAdapter.addDevice(mBluetoothUtils.getBluetoothDevices(intent))
         }
@@ -41,15 +37,7 @@ class NearDevicesActivity :
         setContentView(R.layout.activity_main)
 
         registerReceiver(mBroadCastReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
-        mDevicesAdapter = DevicesAdapter(applicationContext)
-        mDevicesAdapter.listener = this
-        mDevicesRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        mDevicesRecycler.adapter = mDevicesAdapter
-
-        mBluetoothUtils = BluetoothUtils(applicationContext)
-        mBluetoothUtils.fetchBluetoothDevices()
-        mSavedDevicesButton.setOnClickListener(this)
-
+        initUI()
     }
 
     override fun onDestroy() {
@@ -57,11 +45,34 @@ class NearDevicesActivity :
         unregisterReceiver(mBroadCastReceiver)
     }
 
-    override fun onClick(v: View?) {
+
+    /**Methods**/
+    private fun initUI(){
+        mDevicesAdapter = DevicesAdapter(applicationContext)
+        recycler_devices.layoutManager = LinearLayoutManager(applicationContext)
+        recycler_devices.adapter = mDevicesAdapter
+
+        mBluetoothUtils = BluetoothUtils(applicationContext)
+        mBluetoothUtils.fetchBluetoothDevices()
+        mBluetoothUtils.setLoadingLayout(layout_loading as RelativeLayout)
+
+        mDevicesAdapter.listener = this
+        button_save.setOnClickListener{savedDevicesActivity()}
+        button_search.setOnClickListener{refreshDevices()}
+
+    }
+
+    private fun refreshDevices(){
+        mDevicesAdapter.emptyList()
+        mBluetoothUtils.refresh()
+    }
+
+    private fun savedDevicesActivity(){
         val intent = Intent(this, SavedDevicesActivity::class.java)
         startActivity(intent)
     }
 
+    /**Callbacks**/
     override fun onDeviceSelected(device: Device) {
         val repository = WebRepository(applicationContext)
         repository.saveListener = this
@@ -69,18 +80,10 @@ class NearDevicesActivity :
     }
 
     override fun onSaveSuccess() {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("Dispositivo guardado")
-        builder.setPositiveButton("Ok", null)
-        val dialog = builder.create()
-        dialog.show()
+        showMessageDialog(R.string.text_saved_device)
     }
 
     override fun onSaveError(error: String) {
-        val builder = AlertDialog.Builder(applicationContext)
-        builder.setMessage("error")
-        builder.setPositiveButton("Ok", null)
-        val dialog = builder.create()
-        dialog.show()
+        showMessageDialog(error)
     }
 }

@@ -6,17 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".activities.NearDevicesActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mDevicesRecycler"
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_loading"/>
 
     <Button
-        android:id="@+id/mSavedDevicesButton"
+        android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/mDevicesRecycler"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:text="@string/text_saved_devices"/>
+
+    <Button
+        android:id="@+id/button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_save"
+        android:layout_centerHorizontal="true"
+        android:text="@string/text_search"/>
 
 </RelativeLayout>

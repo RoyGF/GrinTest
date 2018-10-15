@@ -8,6 +8,9 @@ data class Device(
         var id : String?,
         var created : Date?,
         var name : String,
-        var strenght : String,
-        var isAvailable : Boolean
-)
+        var strength : String,
+        var isAvailable : Boolean){
+
+    constructor() : this(null, null, "", "", true)
+
+}
