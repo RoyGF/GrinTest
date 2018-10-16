@@ -3,20 +3,37 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:textColor="@android:color/tab_indicator_text"
-        android:text="@string/bullet"/>
-
-    <TextView
-        android:id="@+id/mDeviceName"
+        android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/tab_indicator_text"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_small_margin"/>
+
+    <TextView
+        android:id="@+id/text_strength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/tab_indicator_text"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/fab_margin"/>
+
+    <TextView
+        android:id="@+id/text_created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/tab_indicator_text"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_small_margin"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"/>
 
 </LinearLayout>

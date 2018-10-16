@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.roygf.grintest.models.Device
 import com.roygf.grintest.R
 import kotlinx.android.synthetic.main.item_device.view.*
+import kotlinx.android.synthetic.main.item_device_texts.view.*
 
 class DevicesAdapter (val context: Context)
     : RecyclerView.Adapter<DevicesAdapter.ViewHolder>(), View.OnClickListener {
@@ -17,10 +18,11 @@ class DevicesAdapter (val context: Context)
 
     class ViewHolder (view : View, listener : View.OnClickListener)
         : RecyclerView.ViewHolder(view){
-        val mDeviceName = view.mDeviceName
-        val mSaveButton = view.mSaveButton
+        val name = view.device_name
+        val strength = view.device_strength
+        val button = view.button_save
         init {
-            mSaveButton.setOnClickListener(listener)
+            button.setOnClickListener(listener)
         }
     }
 
@@ -30,8 +32,9 @@ class DevicesAdapter (val context: Context)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val device = devices[position]
-        holder.mDeviceName.text = device.name
-        holder.mSaveButton.tag = device
+        holder.name.text = context.getString(R.string.text_device_name, device.name)
+        holder.strength.text = context.getString(R.string.text_device_strenght_2, device.strength)
+        holder.button.tag = device
     }
 
     override fun getItemCount(): Int {

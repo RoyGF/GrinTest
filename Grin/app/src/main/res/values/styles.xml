@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="button_style">
+
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:background">@drawable/button_rounded_corners</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="android:paddingEnd">@dimen/fab_margin</item>
+        <item name="android:paddingStart">@dimen/fab_margin</item>
+    </style>
+
 </resources>

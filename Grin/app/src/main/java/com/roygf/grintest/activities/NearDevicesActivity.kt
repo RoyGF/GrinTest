@@ -74,16 +74,19 @@ class NearDevicesActivity :
 
     /**Callbacks**/
     override fun onDeviceSelected(device: Device) {
+        showProgressDialog(true)
         val repository = WebRepository(applicationContext)
         repository.saveListener = this
         repository.saveDevice(device)
     }
 
     override fun onSaveSuccess() {
+        showProgressDialog(false)
         showMessageDialog(R.string.text_saved_device)
     }
 
     override fun onSaveError(error: String) {
+        showProgressDialog(false)
         showMessageDialog(error)
     }
 }

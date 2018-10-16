@@ -3,25 +3,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:textColor="@android:color/tab_indicator_text"
-        android:text="@string/bullet"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/mDeviceName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/tab_indicator_text"
-        android:layout_gravity="center_vertical"/>
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/text_save"
+            style="@style/button_style"/>
 
-    <Button
-        android:id="@+id/mSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <include
+            layout="@layout/item_device_texts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/button_save"
+            android:layout_centerVertical="true"/>
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"/>
 
 </LinearLayout>

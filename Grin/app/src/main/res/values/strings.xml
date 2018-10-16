@@ -3,7 +3,17 @@
     <string name="bullet">"\u2022</string>
     <string name="text_saved_devices">Dispositivos Guardados</string>
     <string name="text_saved_device">Dispositivo guardado</string>
-    <string name="text_search">Buscar</string>
-    <string name="text_loading">Buscando dispositivos…</string>
+    <string name="text_save">Guardar</string>
+    <string name="text_loading">Cargando…</string>
     <string name="text_unsupported_bluetooth">Dispositivo no tiene soporte bluetooth o no se encuentra activado</string>
+    <string name="text_save_device_fail">No se pudo guardar el dispositivo</string>
+    <string name="text_update">Actualizar</string>
+    <string name="text_name">Nombre</string>
+    <string name="text_date">Fecha</string>
+    <string name="text_sort_by">Ordenar por:</string>
+    <string name="text_unavailable_devices">No hay dispositivos</string>
+    <string name="text_device_name">Nombre: %1$s</string>
+    <string name="text_device_created">Fecha de creación: %1$s</string>
+    <string name="text_device_strength">Intensidad: %1$s</string>
+    <string name="text_device_strenght_2">Intensidad: %1$sdB</string>
 </resources>

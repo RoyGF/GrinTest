@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.roygf.grintest.R
 import com.roygf.grintest.models.Device
-import kotlinx.android.synthetic.main.item_device.view.*
+import com.roygf.grintest.utils.DateUtils
+import kotlinx.android.synthetic.main.item_saved_device.view.*
+import java.util.*
 
 class SavedDevicesAdapter (val context: Context, val devices : ArrayList<Device>)
     : RecyclerView.Adapter<SavedDevicesAdapter.ViewHolder>() {
@@ -15,7 +17,9 @@ class SavedDevicesAdapter (val context: Context, val devices : ArrayList<Device>
     var mDevices : List<Device>  = devices
 
     class ViewHolder (view : View) : RecyclerView.ViewHolder(view){
-        val mDeviceName = view.mDeviceName
+        val name = view.text_name
+        val strength = view.text_strength
+        val created = view.text_created
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +27,13 @@ class SavedDevicesAdapter (val context: Context, val devices : ArrayList<Device>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mDeviceName?.text = mDevices[position].name
+        val device = mDevices[position]
+        val created = DateUtils.formatDate(device.created)
+
+        holder.name?.text = context.getString(R.string.text_device_name, device.name)
+        holder.created?.text = context.getString(R.string.text_device_created, created)
+        holder.strength?.text = context.getString(R.string.text_device_strength, device.strength)
+
     }
 
     override fun getItemCount(): Int {

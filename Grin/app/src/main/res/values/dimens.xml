@@ -2,6 +2,8 @@
 <resources>
 
     <dimen name="fab_margin">12dp</dimen>
+    <dimen name="fab_small_margin">6dp</dimen>
     <dimen name="fab_text_normal">16sp</dimen>
-
+    <dimen name="fab_button_radious">10dp</dimen>
+    <dimen name="button_height">40dp</dimen>
 </resources>

@@ -3,6 +3,7 @@ package com.roygf.grintest.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.roygf.grintest.R
 import com.roygf.grintest.adapters.SavedDevicesAdapter
 import com.roygf.grintest.models.Device
@@ -24,18 +25,16 @@ class SavedDevicesActivity :
         button_sort_date.setOnClickListener{sortListByDate()}
     }
 
-
     fun fetchDevices(){
+        layout_loading.visibility = View.VISIBLE
         val webRepository = WebRepository(applicationContext)
         webRepository.getDevicesListener = this
         webRepository.fetchSavedDevices()
     }
 
-
     override fun onGetDevicesSuccess(devices: ArrayList<Device>) {
+        layout_loading.visibility = View.GONE
         mAdapter = SavedDevicesAdapter(applicationContext, devices)
-        //var sortedList = devices.sortedWith(compareBy {it.created})
-
         mSavedDevicesRecycler.layoutManager = LinearLayoutManager(applicationContext)
         mSavedDevicesRecycler.adapter = mAdapter
     }
